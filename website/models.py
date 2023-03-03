@@ -7,6 +7,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(50))
     first_name = db.Column(db.String(50))
+    role = db.Column(db.String(50))
 
 
 class Product(db.Model):
@@ -18,9 +19,9 @@ class Product(db.Model):
     stock = db.Column(db.Integer)
 
 
-class Clothes(db.Model, Product):
+class Clothes(Product):
     __tablename__ = 'clothes'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, db.ForeignKey('products.id'), primary_key=True)
     size = db.Column(db.String(2))
     color = db.Column(db.String(50))
     type = db.Column(db.String(6))
@@ -29,10 +30,12 @@ class Clothes(db.Model, Product):
     }
 
 
-class Shoe(db.Model, Product):
+class Shoe(Product):
     __tablename__ = 'shoes'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, db.ForeignKey('products.id'), primary_key=True)
     size = db.Column(db.Integer)
     __mapper_args__ = {
         'polymorphic_identity': 'shoes',
     }
+
+
